@@ -17,12 +17,10 @@ import android.app.ActivityManager.RunningAppProcessInfo;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.Button;
-import android.widget.RemoteViews;
 
 public class TaintDroidNotifyService extends Service {
     private static final String TAG = TaintDroidNotifyService.class.getSimpleName();
@@ -246,7 +244,7 @@ public class TaintDroidNotifyService extends Service {
         // send it
         NotificationManager mgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 		mgr.notify(noti_id, notification);
-		noti_id ++;
+		noti_id++;
     }
 
     private boolean isTaintedSend(String msg) {
@@ -335,7 +333,11 @@ public class TaintDroidNotifyService extends Service {
         }
 
         // destroy the thread
+        this.captureThread.interrupt();
+        this.readThread.interrupt();
         this.captureThread = null;
         this.readThread = null;
+        
+        isRunning = false;
     }
 }
