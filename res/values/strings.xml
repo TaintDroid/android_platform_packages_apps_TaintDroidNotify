@@ -10,6 +10,5 @@
 	<string name="DestIP">Destination IP Adddress: </string>
 	<string name="Taint">Taint: </string>
     <string name="Timestamp">Timestamp: </string>
-	<string name="Data">Data: </string>
-	<string name="at">" @ "</string>
+	<string name="Data">Data (first 100 bytes): </string>
 </resources>

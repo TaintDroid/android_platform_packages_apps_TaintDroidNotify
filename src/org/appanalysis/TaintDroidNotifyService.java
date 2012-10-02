@@ -11,7 +11,6 @@ import java.util.concurrent.*;
 import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.NotificationManager;
-import android.app.Notification.Style;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.app.ActivityManager.RunningAppProcessInfo;
@@ -57,6 +56,13 @@ public class TaintDroidNotifyService extends Service {
     public static final String KEY_DATA = "KEY_DATA";
     public static final String KEY_ID = "KEY_ID";
     public static final String KEY_TIMESTAMP = "KEY_TIMESTAMP";
+    
+    private BlockingQueue logQueue;
+    private static final int LOGQUEUE_MAXSIZE = 4096;
+
+    private volatile boolean doCapture = false;
+    private Thread captureThread = null;
+
 
     public static class Starter extends BroadcastReceiver {
         @Override
@@ -69,11 +75,6 @@ public class TaintDroidNotifyService extends Service {
         }
     };
 
-    private BlockingQueue logQueue;
-    private static final int LOGQUEUE_MAXSIZE = 4096;
-
-    private volatile boolean doCapture = false;
-    private Thread captureThread = null;
     private class Producer implements Runnable {
     	private final BlockingQueue queue;
     	Producer(BlockingQueue q) { queue = q; }
@@ -214,7 +215,7 @@ public class TaintDroidNotifyService extends Service {
     private void sendTaintDroidNotification(int id, String ipaddress, String taint, String appname, String data, String timestamp) {
         Notification notification = new Notification.BigTextStyle(
         new Notification.Builder(this)
-        .setContentTitle("TaintDroid alert")
+        .setContentTitle("TaintDroid")
         .setContentText(appname)
         .setSmallIcon(R.drawable.icon))
         .bigText(appname+"\n"+ipaddress+"\n"+taint)
@@ -330,8 +331,7 @@ public class TaintDroidNotifyService extends Service {
             LogcatDevice.getInstance().close();
         }
         catch(IOException e) {
-            Log.e(TAG, "Could not close the log device properly: "
-                    + e.getMessage());
+            Log.e(TAG, "Could not close the log device properly: " + e.getMessage());
         }
 
         // destroy the thread

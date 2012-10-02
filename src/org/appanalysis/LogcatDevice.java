@@ -10,9 +10,7 @@ public class LogcatDevice {
     private Process logcatProcess = null;
     private BufferedReader br = null;
 
-    private LogcatDevice()
-    {
-    }
+    private LogcatDevice() {}
 
     private static LogcatDevice instance = new LogcatDevice();
 

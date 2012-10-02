@@ -11,8 +11,7 @@ public class LogEntry {
     private String tag;
     private String message;
 
-    private LogEntry() {
-    }
+    private LogEntry() {}
     
     public static LogEntry fromLine(String line) {
         String[] tokens = line.split("\\s+");
@@ -23,14 +22,19 @@ public class LogEntry {
         
         LogEntry le = new LogEntry();
         
+        // "MM-dd HH:mm:ss.SSS"
         le.timestamp = tokens[0]+" "+tokens[1];
         
+        // should be "TaintLog"
         le.tag = tokens[2].substring(tokens[2].indexOf("/"),tokens[2].indexOf("("));
         
+        // pid
         le.pid = Integer.valueOf((line.substring(line.indexOf("(")+1,line.indexOf(")"))).trim());
         
+        // data
         int messageStart = line.indexOf("): ");
-        le.message = line.substring(messageStart);
+        int messageEnd = line.lastIndexOf("]");
+        le.message = line.substring(messageStart, messageEnd);
         
         return le;
     }
