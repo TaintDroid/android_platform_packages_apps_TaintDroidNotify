@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	package="org.appanalysis"
+	android:versionCode="1"
+	android:versionName="1.0">
+
+	<uses-permission
+		android:name="android.permission.READ_LOGS" />
+
+	<application
+		android:icon="@drawable/icon"
+		android:label="@string/app_name"
+		android:debuggable="true">
+		<service
+			android:name="TaintDroidNotifyService"
+			android:description="@string/app_description"
+			android:enabled="true">
+		</service>
+		<!--
+
+			<receiver android:name=".TaintDroidNotifyService$Starter"
+			android:enabled="true"> <intent-filter> <action
+			android:name="android.intent.action.USER_PRESENT" /> </intent-filter>
+			</receiver>
+		-->
+		<activity
+			android:name=".TaintDroidNotifyController"
+			android:label="TaintDroid Notify Controller">
+			<intent-filter>
+				<action
+					android:name="android.intent.action.MAIN" />
+				<category
+					android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity>
+
+		<activity
+			android:name=".TaintDroidNotifyDetail"
+			android:label="TaintDroid notification">
+		</activity>
+
+
+	</application>
+
+
+</manifest> 

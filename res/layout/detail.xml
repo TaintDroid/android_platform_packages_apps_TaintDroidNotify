@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:orientation="vertical"
+	android:gravity="top"
+	android:padding="10px"
+	android:background="#E0E0E0">
+	<LinearLayout
+		android:layout_height="wrap_content"
+		android:layout_width="fill_parent"
+		android:orientation="vertical"
+		android:layout_marginBottom="10px"
+		android:padding="0px">
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:textColor="#000000"
+			android:textStyle="bold"
+			android:text="@string/Application" />
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:textColor="#000000"
+			android:id="@+id/DetailAppTextView" />
+	</LinearLayout>
+	<LinearLayout
+		android:layout_height="wrap_content"
+		android:layout_width="fill_parent"
+		android:orientation="vertical"
+		android:layout_marginBottom="10px"
+		android:padding="0px">
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:textColor="#000000"
+			android:textStyle="bold"
+			android:text="@string/DestIP" />
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:textColor="#000000"
+			android:id="@+id/DetailIPTextView" />
+	</LinearLayout>
+	<LinearLayout
+		android:layout_height="wrap_content"
+		android:layout_width="fill_parent"
+		android:orientation="vertical"
+		android:layout_marginBottom="10px"
+		android:padding="0px">
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:textColor="#000000"
+			android:textStyle="bold"
+			android:text="@string/Taint" />
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:textColor="#000000"
+			android:id="@+id/DetailTaintTextView" />
+	</LinearLayout>
+    	<LinearLayout
+		android:layout_height="wrap_content"
+		android:layout_width="fill_parent"
+		android:orientation="vertical"
+		android:layout_marginBottom="10px"
+		android:padding="0px">
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:textColor="#000000"
+			android:textStyle="bold"
+			android:text="@string/Timestamp" />
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:textColor="#000000"
+			android:id="@+id/DetailTimestampTextView" />
+	</LinearLayout>
+	<LinearLayout
+		android:layout_height="wrap_content"
+		android:layout_width="fill_parent"
+		android:orientation="vertical"
+		android:layout_marginBottom="10px"
+		android:padding="0px">
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:textColor="#000000"
+			android:textStyle="bold"
+			android:text="@string/Data" />
+		<ScrollView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content">
+			<TextView
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:textColor="#000000"
+				android:id="@+id/DetailDataTextView" />
+		</ScrollView>
+	</LinearLayout>
+</LinearLayout>
