@@ -287,7 +287,7 @@ public class TaintDroidNotifyService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if(isRunning) {
-            return START_NOT_STICKY;
+            return START_STICKY;
         }
 
         logQueue = new ArrayBlockingQueue<LogEntry>(LOGQUEUE_MAXSIZE);
@@ -302,7 +302,7 @@ public class TaintDroidNotifyService extends Service {
         }
         catch(IOException e) {
             Log.e(TAG, "Could not open the log device: " + e.getMessage());
-            return START_NOT_STICKY;
+            return START_STICKY;
         }
 
         this.doCapture = true;
@@ -313,7 +313,7 @@ public class TaintDroidNotifyService extends Service {
 
         isRunning = true;
 
-        return START_NOT_STICKY;
+        return START_STICKY;
     }
 
     @Override
