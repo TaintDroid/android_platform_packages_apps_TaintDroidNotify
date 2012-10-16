@@ -135,10 +135,10 @@ public class TaintDroidNotifyService extends Service {
         Matcher m = p.matcher(msg);
 
         if(m.find() && m.groupCount() > 0) {
-        	String result = m.group(1);
-        	// remove trailing junk
-        	if (result.contains(")"))
-        		result = result.substring(0,result.indexOf(")")-1);
+            String result = m.group(1);
+            // remove trailing junk
+            if (result.contains(")"))
+                result = result.substring(0,result.indexOf(")")-1);
             return result;
         }
         else {
@@ -243,8 +243,8 @@ public class TaintDroidNotifyService extends Service {
 
         // send it
         NotificationManager mgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-		mgr.notify(noti_id, notification);
-		noti_id++;
+        mgr.notify(noti_id, notification);
+        noti_id++;
     }
 
     private boolean isTaintedSend(String msg) {
@@ -257,8 +257,8 @@ public class TaintDroidNotifyService extends Service {
     }
 
     private void processLogEntry(LogEntry le) {
-		String timestamp = le.getTimestamp();
-		String msg = le.getMessage(); 
+        String timestamp = le.getTimestamp();
+        String msg = le.getMessage(); 
         boolean taintedSend = isTaintedSend(msg);
         boolean taintedSSLSend = isTaintedSSLSend(msg);
         if(taintedSend || taintedSSLSend) {
@@ -267,8 +267,8 @@ public class TaintDroidNotifyService extends Service {
             String app = get_processname(le.getPid());
             String data = get_data(msg);
             if (taintedSSLSend)
-            	ip=ip+" (SSL)";
-
+                ip=ip+" (SSL)";
+                
             sendTaintDroidNotification(le.hashCode(), ip, taint, app, data, timestamp);
         }
     }

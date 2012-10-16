@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string
-		name="app_name">TaintDroid Notification Service</string>
-	<string
-		name="app_description">I don\'t want to describe it</string>
+	<string name="app_name">TaintDroid Notification Service</string>
+	<string name="app_description">I don\'t want to describe it</string>
 	<string name="Start">Start</string>
 	<string name="Stop">Stop</string>
 	<string name="Application">Application: </string>
 	<string name="DestIP">Destination IP Adddress: </string>
 	<string name="Taint">Taint: </string>
-    <string name="Timestamp">Timestamp: </string>
+	<string name="Timestamp">Timestamp: </string>
 	<string name="Data">Data (first 100 bytes): </string>
 </resources>
