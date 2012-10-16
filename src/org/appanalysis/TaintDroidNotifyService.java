@@ -87,7 +87,7 @@ public class TaintDroidNotifyService extends Service {
                     }
                 }
                 catch(Exception e) {
-                    Log.e(TAG, "Could not read a log entry: " + e.getMessage());
+                    Log.e(TAG, "Producer could not read log entry: " + e.getMessage());
                     e.printStackTrace();
                 }
             }
@@ -108,7 +108,7 @@ public class TaintDroidNotifyService extends Service {
                     processLogEntry(le);
             	}
             	catch (InterruptedException e) {
-            		Log.e(TAG, "Could not read log entry: " + e.getMessage());
+            		Log.e(TAG, "Consumer could not read log entry: " + e.getMessage());
             	}
             }
         }
@@ -207,8 +207,8 @@ public class TaintDroidNotifyService extends Service {
         int start = msg.indexOf("data=[") + 6;
         return msg.substring(start);
     }
-
-	private int noti_id = 0;
+    
+    private int noti_id = 0;
 
     private void sendTaintDroidNotification(int id, String ipaddress, String taint, String appname, String data, String timestamp) {
         Notification notification = new Notification.BigTextStyle(
@@ -321,8 +321,8 @@ public class TaintDroidNotifyService extends Service {
         super.onDestroy();
 
         // stop the thread
-        this.doCapture = false;
         this.doRead = false;
+        this.doCapture = false;
 
         // close the log
         try {
@@ -333,10 +333,10 @@ public class TaintDroidNotifyService extends Service {
         }
 
         // destroy the thread
-        this.captureThread.interrupt();
         this.readThread.interrupt();
-        this.captureThread = null;
+        this.captureThread.interrupt();
         this.readThread = null;
+        this.captureThread = null;
         
         isRunning = false;
     }
