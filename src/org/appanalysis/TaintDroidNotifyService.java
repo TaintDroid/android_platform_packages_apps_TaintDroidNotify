@@ -7,6 +7,8 @@ import java.util.regex.Pattern;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.concurrent.*;
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
 
 import android.app.ActivityManager;
 import android.app.Notification;
@@ -269,7 +271,20 @@ public class TaintDroidNotifyService extends Service {
             if (taintedSSLSend)
                 ip=ip+" (SSL)";
                 
-            sendTaintDroidNotification(le.hashCode(), ip, taint, app, data, timestamp);
+            // only send notification if recent (within last 5 seconds)
+            SimpleDateFormat format = new SimpleDateFormat("MM-dd HH:mm:ss.SSS");
+            Date now = new Date();
+            Date logDate = new Date();
+            try {
+                logDate = format.parse(timestamp);
+                logDate.setYear(now.getYear()); 
+            } catch (ParseException e) {
+                Log.e(TAG, "Error parsing data from log entry");
+            }
+            long diffSec = TimeUnit.MILLISECONDS.toSeconds(now.getTime()-logDate.getTime());
+            
+            if (diffSec<5)
+                sendTaintDroidNotification(le.hashCode(), ip, taint, app, data, timestamp);
         }
     }
 
