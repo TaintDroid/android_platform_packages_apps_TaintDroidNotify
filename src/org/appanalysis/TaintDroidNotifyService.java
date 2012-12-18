@@ -51,7 +51,7 @@ public class TaintDroidNotifyService extends Service {
     private volatile static boolean isRunning = false;
 
     public static final String KEY_APPNAME = "KEY_APPNAME";
-    public static final String KEY_IPADDRESS = "KEY_IPADDRESS";
+    public static final String KEY_DEST = "KEY_DEST";
     public static final String KEY_TAINT = "KEY_TAINT";
     public static final String KEY_DATA = "KEY_DATA";
     public static final String KEY_ID = "KEY_ID";
@@ -132,7 +132,7 @@ public class TaintDroidNotifyService extends Service {
         return pname;
     }
 
-    private String get_ipaddress(String msg) {
+    private String get_dest(String msg) {
     	Pattern p = Pattern.compile("\\((.+)\\) ");
         Matcher m = p.matcher(msg);
 
@@ -142,6 +142,18 @@ public class TaintDroidNotifyService extends Service {
             if (result.contains(")"))
                 result = result.substring(0,result.indexOf(")")-1);
             return result;
+        }
+        else {
+            return null;
+        }
+    }
+    
+    private String get_smsapp(String msg) {
+    	Pattern p = Pattern.compile("from app ((\\S)*) ");
+        Matcher m = p.matcher(msg);
+
+        if(m.find() && m.groupCount() > 0) {
+            return m.group(1);
         }
         else {
             return null;
@@ -206,25 +218,26 @@ public class TaintDroidNotifyService extends Service {
     }
 
     private String get_data(String msg) {
-        int start = msg.indexOf("data=[") + 6;
+        String dataPrefix = "data=[";
+        int start = msg.indexOf(dataPrefix) + dataPrefix.length();
         return msg.substring(start);
     }
     
     private int noti_id = 0;
 
-    private void sendTaintDroidNotification(int id, String ipaddress, String taint, String appname, String data, String timestamp) {
+    private void sendTaintDroidNotification(int id, String dest, String taint, String appname, String data, String timestamp) {
         Notification notification = new Notification.BigTextStyle(
         new Notification.Builder(this)
         .setContentTitle("TaintDroid")
         .setContentText(appname)
         .setSmallIcon(R.drawable.icon))
-        .bigText(appname+"\n"+ipaddress+"\n"+taint)
+        .bigText(appname+"\n"+dest+"\n"+taint)
         .build();
 
         // set intent to launch detail
         Bundle extras = new Bundle();
         extras.putString(KEY_APPNAME, appname);
-        extras.putString(KEY_IPADDRESS, ipaddress);
+        extras.putString(KEY_DEST, dest);
         extras.putString(KEY_TAINT, taint);
         extras.putString(KEY_DATA, data);
         extras.putInt(KEY_ID, id);
@@ -257,34 +270,55 @@ public class TaintDroidNotifyService extends Service {
     private boolean isTaintedSSLSend(String msg) {
     	return msg.contains("SSLOutputStream.write");
     }
+    
+    private boolean isTaintedSMS(String msg) {
+        return msg.contains("GsmSMSDispatcher.sendSMS") || msg.contains("CdmaSMSDispatcher.sendSMS");
+    }
 
     private void processLogEntry(LogEntry le) {
         String timestamp = le.getTimestamp();
-        String msg = le.getMessage(); 
+        String msg = le.getMessage();
+        
+        boolean doNotify = false;
+        
         boolean taintedSend = isTaintedSend(msg);
         boolean taintedSSLSend = isTaintedSSLSend(msg);
-        if(taintedSend || taintedSSLSend) {
-            String ip = get_ipaddress(msg);
-            String taint = get_taint(msg);
-            String app = get_processname(le.getPid());
-            String data = get_data(msg);
+        boolean taintedSMS = isTaintedSMS(msg);
+        
+        String dest="", taint="", app="", data="";
+        
+        if (taintedSend || taintedSSLSend) {
+            dest = get_dest(msg);
+            taint = get_taint(msg);
+            app = get_processname(le.getPid());
+            data = get_data(msg);
             if (taintedSSLSend)
-                ip=ip+" (SSL)";
-                
+                dest=dest+" (SSL)";
+            doNotify = true;
+        }
+        else if (taintedSMS) {
+            dest = get_dest(msg);
+            taint = get_taint(msg);
+            app = get_smsapp(msg);
+            data = get_data(msg);
+            doNotify = true;
+        }
+        
+        if (doNotify) {
             // only send notification if recent (within last 5 seconds)
             SimpleDateFormat format = new SimpleDateFormat("MM-dd HH:mm:ss.SSS");
             Date now = new Date();
             Date logDate = new Date();
             try {
                 logDate = format.parse(timestamp);
-                logDate.setYear(now.getYear()); 
+                logDate.setYear(now.getYear());
             } catch (ParseException e) {
                 Log.e(TAG, "Error parsing data from log entry");
             }
             long diffSec = TimeUnit.MILLISECONDS.toSeconds(now.getTime()-logDate.getTime());
             
             if (diffSec<5)
-                sendTaintDroidNotification(le.hashCode(), ip, taint, app, data, timestamp);
+                sendTaintDroidNotification(le.hashCode(), dest, taint, app, data, timestamp);
         }
     }
 

@@ -5,7 +5,7 @@
 	<string name="Start">Start</string>
 	<string name="Stop">Stop</string>
 	<string name="Application">Application: </string>
-	<string name="DestIP">Destination IP Adddress: </string>
+	<string name="Dest">Destination: </string>
 	<string name="Taint">Taint: </string>
 	<string name="Timestamp">Timestamp: </string>
 	<string name="Data">Data (first 100 bytes): </string>

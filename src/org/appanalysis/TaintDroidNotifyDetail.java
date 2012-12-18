@@ -11,7 +11,7 @@ public class TaintDroidNotifyDetail extends Activity {
         Bundle b = getIntent().getExtras();
 
         String appname = b.getString(TaintDroidNotifyService.KEY_APPNAME);
-        String ipaddress = b.getString(TaintDroidNotifyService.KEY_IPADDRESS);
+        String dest = b.getString(TaintDroidNotifyService.KEY_DEST);
         String taint = b.getString(TaintDroidNotifyService.KEY_TAINT);
         String data = b.getString(TaintDroidNotifyService.KEY_DATA);
         int id = b.getInt(TaintDroidNotifyService.KEY_ID);
@@ -20,8 +20,8 @@ public class TaintDroidNotifyDetail extends Activity {
         TextView tv = (TextView) findViewById(R.id.DetailAppTextView);
         tv.setText(appname);
 
-        tv = (TextView) findViewById(R.id.DetailIPTextView);
-        tv.setText(ipaddress);
+        tv = (TextView) findViewById(R.id.DetailDestTextView);
+        tv.setText(dest);
 
         tv = (TextView) findViewById(R.id.DetailTaintTextView);
         tv.setText(taint);
