@@ -15,6 +15,8 @@ public class LogEntry {
     }
     
     public static LogEntry fromLine(String line) {
+        if(line == null)
+          return null;
         String[] tokens = line.split("\\s+");
         
         // skip over "--------- beginning of /dev/log/system" etc
